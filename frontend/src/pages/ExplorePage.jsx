@@ -14,6 +14,7 @@ export const ExplorePage = () => {
   const { getPosts, posts, isLoading } = usePostStore();
   useEffect(() => {
     getPosts();
+    console.log(posts);
   }, [getPosts]);
 
   return (

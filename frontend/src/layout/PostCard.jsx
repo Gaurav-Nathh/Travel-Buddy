@@ -14,7 +14,7 @@ const PostCard = ({ post }) => {
           className="w-12 h-12 rounded-full object-cover"
         />
         <div>
-          <p className="font-semibold text-lg">{username}</p>
+          <p className="font-semibold text-lg text-gray-700">{username}</p>
           <p className="text-sm text-gray-500">{headline}</p>
         </div>
       </div>

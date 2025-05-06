@@ -51,7 +51,7 @@ const PostCreation = () => {
             value={from}
             required
             onChange={(e) => setFrom(e.target.value)}
-            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
+            className="mt-1 block w-full text-gray-800 rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
             placeholder="Start location"
           />
         </div>
@@ -64,7 +64,7 @@ const PostCreation = () => {
             value={to}
             required
             onChange={(e) => setTo(e.target.value)}
-            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
+            className="mt-1 block w-full text-gray-800 rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
             placeholder="Destination"
           />
         </div>
@@ -79,7 +79,7 @@ const PostCreation = () => {
             value={buddyCount}
             required
             onChange={(e) => setBuddyCount(e.target.value)}
-            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
+            className="mt-1 block w-full text-gray-800 rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
             placeholder="Number of travel buddies"
           />
         </div>
@@ -94,7 +94,7 @@ const PostCreation = () => {
             value={date}
             required
             onChange={(e) => setDate(e.target.value)}
-            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
+            className="mt-1 block w-full text-gray-800 rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
           />
         </div>
 
@@ -108,7 +108,7 @@ const PostCreation = () => {
             onChange={(e) => setContent(e.target.value)}
             required
             placeholder="What's on your mind?"
-            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100 min-h-[100px] resize-none"
+            className="mt-1 block w-full text-gray-800 rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100 min-h-[100px] resize-none"
           />
         </div>
 

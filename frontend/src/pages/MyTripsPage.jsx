@@ -6,7 +6,7 @@ export const MyTripsPage = () => {
   return (
     <>
       <Navbar />
-      <div className="bord w-full h-[100svh] flex justify-center pt-8">
+      <div className="w-full h-[100svh] flex justify-center pt-8">
         <div>
           <PostCreation></PostCreation>
         </div>

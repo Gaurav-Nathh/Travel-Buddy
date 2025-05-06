@@ -2,19 +2,34 @@ import Post from "../models/postModel.js";
 
 export const getFeedPosts = async (req, res) => {
   try {
-    const posts = await Post.find({
-      author: { $in: [req.user._id] },
-    })
+    const posts = await Post.find({})
       .populate("author", "name username profilePicture headline")
       .populate("comments.user", "name profilePicture")
       .sort({ createAt: -1 });
 
+    console.log(posts);
     res.status(200).json(posts);
   } catch (error) {
     console.error("Error in getFeedPosts controller:", error);
     res.status(500).json({ message: "Server error " });
   }
 };
+// export const getFeedPosts = async (req, res) => {
+//   try {
+//     const posts = await Post.find({
+//       author: { $in: [req.user._id] },
+//     })
+//       .populate("author", "name username profilePicture headline")
+//       .populate("comments.user", "name profilePicture")
+//       .sort({ createAt: -1 });
+
+//     console.log(posts);
+//     res.status(200).json(posts);
+//   } catch (error) {
+//     console.error("Error in getFeedPosts controller:", error);
+//     res.status(500).json({ message: "Server error " });
+//   }
+// };
 
 export const createPost = async (req, res) => {
   console.log(req.body);
