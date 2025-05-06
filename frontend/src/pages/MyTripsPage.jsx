@@ -1,6 +1,6 @@
 import { Navbar } from "../components/Navbar";
 import { Transition } from "../components/Transition";
-import PostCreation from "../layout/postCreation";
+import PostCreation from "../layout/PostCreation";
 
 export const MyTripsPage = () => {
   return (
