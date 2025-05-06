@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: inter;
+}
+.bord {
+  @apply border-2 border-solid border-red-500;
+}
+::after ::before {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: inherit;
+}
+html {
+  font-size: 62.5%;
+}
+body {
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.animetext {
+  text-transform: uppercase;
+  background: linear-gradient(
+    to right,
+    #e55ee7,
+    #8f68ff,
+    #487bff,
+    #8f68ff,
+    #e55ee7
+  );
+  background-size: 200%;
+  background-clip: text;
+  animation: animate-gradient 4.5s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes animate-gradient {
+  to {
+    background-position: 200%;
+  }
+}
