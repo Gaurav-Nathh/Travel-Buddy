@@ -1,4 +1,3 @@
-// import { type } from "express/lib/response";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
@@ -46,6 +45,12 @@ const userSchema = new mongoose.Schema(
       {
         title: String,
         description: String,
+      },
+    ],
+    connections: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
     lastLogin: {

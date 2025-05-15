@@ -1,130 +1,67 @@
-import { Navigate, Route, Router, Routes } from "react-router-dom";
-import { SignUpPage } from "./pages/SignUpPage";
-import { LogInPage } from "./pages/LogInPage";
-import { HomePage } from "./pages/HomePage";
-import { EmailVerificationPage } from "./pages/EmailVerificationPage";
-import { ExplorePage } from "./pages/ExplorePage";
-import { MyTripsPage } from "./pages/MyTripsPage";
-import { CommunityPage } from "./pages/CommunityPage";
-import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
-import { ResetPasswordPage } from "./pages/ResetPasswordPage";
-import { ProfilePage } from "./pages/ProfilePage";
-import { Navbar } from "./components/Navbar";
-import { Transition } from "./components/Transition";
-import toast, { Toaster } from "react-hot-toast";
-import { useAuthStore } from "./Store/authStore";
-import { Children, useEffect, useRef } from "react";
-import LoadingSpinner from "./components/LoadingSpinner";
-
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-  const hadShownToast = useRef(false);
-  if (!isAuthenticated) {
-    useEffect(() => {
-      if (!hadShownToast.current) {
-        toast("Please Login to access the page");
-        hadShownToast.current = true;
-      }
-    }, []);
-    return <Navigate to="/login" replace />;
-  }
-  if (!user.isVerified) {
-    return <Navigate to="verify-email" replace />;
-  }
-  return children;
-};
-const RedirectAuthenticatedUser = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
-
-  if (isAuthenticated && user.isVerified) {
-    return <Navigate to="/" replace />;
-  }
-
-  return children;
-};
+import HomePage from "./pages/HomePage";
+import SignUpPage from "./pages/auth/SignUpPage";
+import LoginPage from "./pages/auth/LoginPage";
+import Layout from "./components/layout/Layout";
+import { Route, Routes, Navigate } from "react-router-dom";
+import EmailVerificationPage from "./pages/auth/EmailVerificationPage";
+import { useQuery } from "@tanstack/react-query";
+import { axiosInstance } from "./lib/axios";
+import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+import Explore from "./pages/Explore";
+import MyTrip from "./pages/MyTrip";
+import { fetchAuthUser } from "./queries/authQueries";
+import Connection from "./pages/Connection";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
-  const { isCheckingAuth, checkAuth } = useAuthStore();
+  // const { data: authUser, isLoading } = useQuery({
+  //   queryKey: ["authUser"],
+  //   queryFn: async () => {
+  //     try {
+  //       const res = await axiosInstance.get("/auth/me");
+  //       return res.data;
+  //     } catch (err) {
+  //       if (err.response && err.response.status === 401) {
+  //         return null;
+  //       }
+  //       toast.error(err.response.data.message || "Something went wrong");
+  //     }
+  //   },
+  // });
+  const { data: authUser, isLoading } = useQuery({
+    queryKey: ["authUser"],
+    queryFn: fetchAuthUser,
+  });
 
-  useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
-
-  if (isCheckingAuth) return <LoadingSpinner />;
+  if (isLoading) return null;
 
   return (
-    <div>
+    <Layout>
       <Routes>
-        <Route index element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route
-          path="/signup"
-          element={
-            <RedirectAuthenticatedUser>
-              <SignUpPage />
-            </RedirectAuthenticatedUser>
-          }
+          path="/signup/verify-email"
+          element={<EmailVerificationPage />}
+        />
+        <Route path="/explore" element={<Explore />} />
+        <Route
+          path="/connections"
+          element={authUser ? <Connection /> : <Navigate to={"/login"} />}
         />
         <Route
-          path="/login"
-          element={
-            <RedirectAuthenticatedUser>
-              <LogInPage />
-            </RedirectAuthenticatedUser>
-          }
-        />
-        <Route path="/verify-email" element={<EmailVerificationPage />} />
-        <Route
-          path="/explore"
-          element={
-            <ProtectedRoute>
-              <ExplorePage />
-            </ProtectedRoute>
-          }
+          path="/mytrip"
+          element={authUser ? <MyTrip /> : <Navigate to={"/login"} />}
         />
         <Route
-          path="/my-trips"
-          element={
-            <ProtectedRoute>
-              <MyTripsPage />
-            </ProtectedRoute>
-          }
+          path="/profile/:username"
+          element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />}
         />
-        <Route
-          path="/community"
-          element={
-            <ProtectedRoute>
-              <CommunityPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <RedirectAuthenticatedUser>
-              <ForgotPasswordPage />
-            </RedirectAuthenticatedUser>
-          }
-        />
-        <Route
-          path="reset-password/:token"
-          element={
-            <RedirectAuthenticatedUser>
-              <ResetPasswordPage />
-            </RedirectAuthenticatedUser>
-          }
-        />
-        <Route
-          path="profile/:token"
-          element={
-            <RedirectAuthenticatedUser>
-              <ProfilePage />
-            </RedirectAuthenticatedUser>
-          }
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Toaster />
-    </div>
+    </Layout>
   );
 }
 

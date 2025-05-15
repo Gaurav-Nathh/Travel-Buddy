@@ -1,31 +1,36 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { axoisInst } from "../lib/axios.js";
+import { axiosInstance } from "../../lib/axios";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import travel_buddy_logo from "../../public/TravelBuddy_Logo.svg";
-import { Input } from "../components/Input";
+import { Input } from "../../components/Input";
 import { Loader, LockKeyholeIcon, Mail, User2 } from "lucide-react";
-import {
-  PasswordStrengthMeter,
-  getPasswordStrength,
-} from "../components/PasswordStrengthMeter";
-import { useAuthStore } from "../Store/authStore";
-import axios from "axios";
 import toast from "react-hot-toast";
-export const SignUpPage = () => {
+import { PasswordStrengthMeter } from "../../components/PasswordStrengthMeter";
+import { useMutation } from "@tanstack/react-query";
+
+const SignUpPage = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { signup, error, isLoading } = useAuthStore();
+
+  const { mutate: signUpMutation, isPending } = useMutation({
+    mutationFn: async (data) => {
+      const res = await axiosInstance.post("/auth/signup", data);
+      return res.data;
+    },
+    onSuccess: () => {
+      navigate("verify-email");
+    },
+    onError: (err) => {
+      console.log("error");
+      toast.error(err.response?.data.message || "Something went wrong");
+    },
+  });
   const handleSignUp = async (e) => {
     e.preventDefault();
-    try {
-      await signup(email, password, name, username);
-      navigate("/verify-email");
-    } catch (error) {}
+    signUpMutation({ name, username, email, password });
   };
   return (
     <>
@@ -38,7 +43,7 @@ export const SignUpPage = () => {
         >
           <Link to={"/"}>
             <img
-              src={travel_buddy_logo}
+              src="/TravelBuddy_Logo.svg"
               alt=""
               className="w-[13rem] mt-8 m-auto"
             />
@@ -78,11 +83,11 @@ export const SignUpPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {error && (
+            {/* {error && (
               <p className="ml-10 mt-6 text-lg text-left text-red-500">
                 {error}
               </p>
-            )}
+            )} */}
             <PasswordStrengthMeter password={password} />
 
             <motion.button
@@ -90,7 +95,7 @@ export const SignUpPage = () => {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={
-                isLoading ||
+                isPending ||
                 !name ||
                 !email ||
                 !password ||
@@ -102,7 +107,7 @@ export const SignUpPage = () => {
               }
               className=" text-white w-[85%] font-medium py-4 my-6 text-2xl rounded-xl bg-blue_main"
             >
-              {isLoading ? (
+              {isPending ? (
                 <Loader className=" animate-spin mx-auto" size={24} />
               ) : (
                 "Sign Up"
@@ -121,3 +126,5 @@ export const SignUpPage = () => {
     </>
   );
 };
+
+export default SignUpPage;

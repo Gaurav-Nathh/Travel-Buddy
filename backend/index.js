@@ -4,7 +4,9 @@ import { connectDb } from "./db/connectDB.js";
 import cors from "cors";
 import authroute from "./routes/authroute.js";
 import userRoutes from "./routes/userRoute.js";
-import postroute from "./routes/postroute.js"
+import postroute from "./routes/postroute.js";
+import notificationRoute from "./routes/notification.route.js";
+import connectionRoute from "./routes/connection.route.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 import exp from "constants";
@@ -16,12 +18,14 @@ const __dirname = path.resolve();
 
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
 app.use("/api/auth", authroute);
 app.use("/api/users", userRoutes);
-app.use("/api/post", postroute)
+app.use("/api/post", postroute);
+app.use("/api/notifications", notificationRoute);
+app.use("/api/connections", connectionRoute);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/dist")));
