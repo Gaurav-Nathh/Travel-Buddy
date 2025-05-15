@@ -47,6 +47,7 @@ const EmailVerificationPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
       toast.success("Email verified succesfully");
+      navigate("/");
     },
     onError: (err) => {
       toast.error(err.response.data.message || "Something went wrong");
@@ -55,7 +56,8 @@ const EmailVerificationPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const verificationCode = code.join("");
-    handleSubmitMutation({ verificationCode });
+    console.log(verificationCode);
+    handleSubmitMutation({ code: verificationCode });
   };
 
   useEffect(() => {
@@ -106,7 +108,7 @@ const EmailVerificationPage = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               type="submit"
-              disabled={isLoading || code.some((digit) => !digit)}
+              disabled={isPending || code.some((digit) => !digit)}
               className="w-full bg-blue_main py-3 mt-7 text-white font-bold text-xl rounded-xl"
             >
               {isPending ? "Verifying..." : "Verify Email"}

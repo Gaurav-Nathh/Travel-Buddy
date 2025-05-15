@@ -31,19 +31,23 @@ const MyTrip = () => {
   });
 
   return (
-    <div className="flex gap-6 justify-center mt-6">
-      {/* <div className="hidden lg:block lg:col-span-1">
-        <Sidebar user={authUser} />
-      </div> */}
-      <div className="w-[70rem]">
+    <div className="lg:max-w-[85%] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+      {/* Post Creation Column */}
+      <div className="order-1 lg:order-none">
         <PostCreation user={authUser} />
-        <div className="mt-6">
-          {posts?.map((post) => (
-            <Post key={post._id} post={post} />
-          ))}
+      </div>
 
-          {posts?.length === 0 && (
-            <div className="bg-white rounded-lg shadow p-8 text-center">
+      {/* Posts Column */}
+      <div className="order-2 lg:order-none">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 
+                 overflow-visible lg:overflow-y-auto lg:max-h-[calc(100vh-50px)] 
+                 pr-2"
+        >
+          {posts?.length > 0 ? (
+            posts.map((post) => <Post key={post._id} post={post} />)
+          ) : (
+            <div className="bg-white rounded-xl shadow p-8 text-center col-span-full">
               <div className="mb-6">
                 <Users size={64} className="mx-auto text-blue-500" />
               </div>

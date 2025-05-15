@@ -44,7 +44,10 @@ function App() {
           path="/signup/verify-email"
           element={<EmailVerificationPage />}
         />
-        <Route path="/explore" element={<Explore />} />
+        <Route
+          path="/explore"
+          element={authUser ? <Explore /> : <Navigate to={"/login"} />}
+        />
         <Route
           path="/connections"
           element={authUser ? <Connection /> : <Navigate to={"/login"} />}

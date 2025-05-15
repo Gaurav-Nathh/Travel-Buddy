@@ -58,23 +58,21 @@ export const PostCreation = ({ user }) => {
     setDate("");
   };
   return (
-    <div className="w-[100%] mx-auto p-6 bg-white rounded-2xl shadow-lg">
+    <div className="w-full mx-auto p-8 bg-white rounded-3xl shadow-xl border border-gray-200 transition-all duration-300">
       <form onSubmit={handlePostCreation} className="space-y-6">
         {/* User Info */}
         <div className="flex items-center space-x-4">
           <img
             src={user.profilePicture || "/avatar.png"}
             alt={user.name}
-            className="w-12 h-12 rounded-full object-cover"
+            className="w-14 h-14 rounded-full object-cover ring-2 ring-primary"
           />
-          <p className=" text-2xl font-semibold text-gray-800">
-            {user.username}
-          </p>
+          <p className="text-xl font-bold text-gray-900">{user.username}</p>
         </div>
 
         {/* From Input */}
         <div>
-          <label className="block text-xl font-medium text-gray-700">
+          <label className="block text-lg font-semibold text-gray-600 mb-1">
             From
           </label>
           <input
@@ -82,27 +80,29 @@ export const PostCreation = ({ user }) => {
             value={from}
             required
             onChange={(e) => setFrom(e.target.value)}
-            className="mt-1 block w-full text-gray-800 rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
+            className="text-lg w-full rounded-xl border border-gray-300 bg-gray-50 p-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
             placeholder="Start location"
           />
         </div>
 
         {/* To Input */}
         <div>
-          <label className="block text-xl font-medium text-gray-700">To</label>
+          <label className="block text-lg font-semibold text-gray-600 mb-1">
+            To
+          </label>
           <input
             type="text"
             value={to}
             required
             onChange={(e) => setTo(e.target.value)}
-            className="mt-1 block w-full text-gray-800 rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
+            className="text-lg w-full rounded-xl border border-gray-300 bg-gray-50 p-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
             placeholder="Destination"
           />
         </div>
 
-        {/* Buddy Count Input */}
+        {/* Buddy Count */}
         <div>
-          <label className="block text-xl font-medium text-gray-700">
+          <label className="block text-lg font-semibold text-gray-600 mb-1">
             Buddy Count
           </label>
           <input
@@ -110,14 +110,14 @@ export const PostCreation = ({ user }) => {
             value={buddyCount}
             required
             onChange={(e) => setBuddyCount(e.target.value)}
-            className="mt-1 block w-full text-gray-800 rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
+            className="text-lg w-full rounded-xl border border-gray-300 bg-gray-50 p-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
             placeholder="Number of travel buddies"
           />
         </div>
 
-        {/* Date Input */}
+        {/* Travel Date */}
         <div>
-          <label className="block text-xl font-medium text-gray-700">
+          <label className="block text-lg font-semibold text-gray-600 mb-1">
             Travel Date
           </label>
           <input
@@ -125,13 +125,13 @@ export const PostCreation = ({ user }) => {
             value={date}
             required
             onChange={(e) => setDate(e.target.value)}
-            className="mt-1 block w-full text-gray-800 rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100"
+            className="text-lg w-full rounded-xl border border-gray-300 bg-gray-50 p-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
           />
         </div>
 
-        {/* Main Content / Description */}
+        {/* Description */}
         <div>
-          <label className="block text-xl font-medium text-gray-700">
+          <label className="block text-lg font-semibold text-gray-600 mb-1">
             Description
           </label>
           <textarea
@@ -139,7 +139,7 @@ export const PostCreation = ({ user }) => {
             onChange={(e) => setContent(e.target.value)}
             required
             placeholder="What's on your mind?"
-            className="mt-1 block w-full text-gray-800 rounded-lg border-gray-300 shadow-sm focus:ring-primary focus:border-primary p-4 bg-gray-100 min-h-[100px] resize-none"
+            className="text-lg w-full min-h-[120px] resize-none rounded-xl border border-gray-300 bg-gray-50 p-4 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
           />
         </div>
 
@@ -148,7 +148,7 @@ export const PostCreation = ({ user }) => {
           <button
             type="submit"
             disabled={isPending}
-            className="text-white bg-blue-700 py-3 px-5 rounded-xl"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {isPending ? <Loader className="animate-spin w-5 h-5" /> : "Post"}
           </button>

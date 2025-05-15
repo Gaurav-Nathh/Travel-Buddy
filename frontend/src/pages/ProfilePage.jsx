@@ -4,6 +4,10 @@ import { fetchAuthUser } from "../queries/authQueries";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
 import ProfileHeader from "../components/ProfileComponent.jsx/ProfileHeader";
+import AboutSection from "../components/ProfileComponent.jsx/AboutSection";
+import InterestSection from "../components/ProfileComponent.jsx/InterestSection";
+import ExperienceSection from "../components/ProfileComponent.jsx/ExperienceSection";
+import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const { username } = useParams();
@@ -25,7 +29,7 @@ const ProfilePage = () => {
     },
     onSuccess: () => {
       toast.success("Profile updated successfully");
-      queryClient.invalidateQueries(["userProfile", username]);
+      queryClient.fetchQuery(["userProfile", username]);
     },
   });
 
@@ -44,7 +48,7 @@ const ProfilePage = () => {
         isOwnProfile={isOwnProfile}
         onSave={handleSave}
       />
-      {/* <AboutSection
+      <AboutSection
         userData={userData}
         isOwnProfile={isOwnProfile}
         onSave={handleSave}
@@ -54,16 +58,11 @@ const ProfilePage = () => {
         isOwnProfile={isOwnProfile}
         onSave={handleSave}
       />
-      <EducationSection
+      <InterestSection
         userData={userData}
         isOwnProfile={isOwnProfile}
         onSave={handleSave}
       />
-      <SkillsSection
-        userData={userData}
-        isOwnProfile={isOwnProfile}
-        onSave={handleSave}
-      /> */}
     </div>
   );
 };

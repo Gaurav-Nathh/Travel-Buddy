@@ -24,7 +24,7 @@ const Connection = () => {
     queryFn: () => axiosInstance.get("/connections"),
   });
   return (
-    <div className="bg-gray-100 rounded-lg shadow p-6">
+    <div className="lg:max-w-[70%] mx-auto mt-6 w-full bg-gray-100 rounded-lg shadow p-6">
       <h1 className="text-2xl font-bold mb-4 text-center">My Connections</h1>
 
       <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">

@@ -25,6 +25,7 @@ const Navbar = () => {
   const { data: notifications } = useQuery({
     queryKey: ["notifications"],
     queryFn: async () => axiosInstance.get("/notifications"),
+    refetchInterval: 2000,
     enabled: !!authUser,
   });
 
@@ -40,11 +41,12 @@ const Navbar = () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
   });
-  // const unreadNotificationCount = notifications?.data.filter(
-  //   (notif) => !notif.read
-  // ).length;
+  const unreadNotificationCount = notifications?.data.filter(
+    (notif) => !notif.read
+  ).length;
   const unreadConnectionRequestCount = connectionRequests?.data?.length;
-  const unreadNotificationCount = 5;
+
+  console.log(unreadNotificationCount);
 
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -90,9 +92,15 @@ const Navbar = () => {
             <li key={link.name}>
               <Link
                 to={link.path}
-                className="hover:text-blue-500 transition-colors duration-200"
+                className="relative hover:text-blue-500 transition-colors duration-200"
               >
                 {link.name}
+
+                {link.count > 0 && (
+                  <span className="absolute -top-1.5 -right-3 bg-red-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-full">
+                    {link.count}
+                  </span>
+                )}
               </Link>
             </li>
           ))}
