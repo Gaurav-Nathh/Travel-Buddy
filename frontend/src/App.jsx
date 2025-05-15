@@ -1,12 +1,10 @@
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/auth/SignUpPage";
-import LoginPage from "./pages/auth/LoginPage";
+import LogInPage from "./pages/auth/LoginPage";
 import Layout from "./components/layout/Layout";
 import { Route, Routes, Navigate } from "react-router-dom";
 import EmailVerificationPage from "./pages/auth/EmailVerificationPage";
 import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "./lib/axios";
-import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import Explore from "./pages/Explore";
 import MyTrip from "./pages/MyTrip";
@@ -41,7 +39,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LogInPage />} />
         <Route
           path="/signup/verify-email"
           element={<EmailVerificationPage />}

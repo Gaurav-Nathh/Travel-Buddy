@@ -7,7 +7,7 @@ import { Loader, LockKeyholeIcon, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 
-const LoginPage = () => {
+const LogInPage = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -101,4 +101,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LogInPage;
