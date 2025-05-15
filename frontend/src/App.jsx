@@ -1,6 +1,6 @@
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/auth/SignUpPage";
-import LogInPage from "./pages/auth/LoginPage";
+import LogInPage from "./pages/auth/LogInPage";
 import Layout from "./components/layout/Layout";
 import { Route, Routes, Navigate } from "react-router-dom";
 import EmailVerificationPage from "./pages/auth/EmailVerificationPage";
