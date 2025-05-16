@@ -13,12 +13,11 @@ const InterestSection = ({ userData, isOwnProfile, onSave }) => {
     }
   };
 
-  const handleDeleteIntrest = (intrest) => {
-    setIntrest(intrest.filter((s) => s !== intrest));
+  const handleDeleteIntrest = (intrestToDelete) => {
+    setIntrest(intrest.filter((s) => s !== intrestToDelete));
   };
 
   const handleSave = () => {
-    console.log(intrest);
     onSave({ intrest });
     setIsEditing(false);
   };

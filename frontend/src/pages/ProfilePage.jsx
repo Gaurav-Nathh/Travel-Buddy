@@ -13,12 +13,12 @@ const ProfilePage = () => {
   const { username } = useParams();
   const queryClient = useQueryClient();
 
-  const { data: authUser, isLoading } = useQuery({
+  const { data: authUser, isPending } = useQuery({
     queryKey: ["authUser"],
     queryFn: fetchAuthUser,
   });
 
-  const { data: userProfile, isLoading: isUserProfileLoading } = useQuery({
+  const { data: userProfile, isPending: isUserProfileLoading } = useQuery({
     queryKey: ["userProfile", username],
     queryFn: () => axiosInstance.get(`/users/${username}`),
   });
@@ -33,7 +33,7 @@ const ProfilePage = () => {
     },
   });
 
-  if (isLoading || isUserProfileLoading) return null;
+  if (isPending || isUserProfileLoading) return null;
 
   const isOwnProfile = authUser.username === userProfile.data.username;
   const userData = isOwnProfile ? authUser : userProfile.data;

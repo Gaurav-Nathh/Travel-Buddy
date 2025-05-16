@@ -38,7 +38,7 @@ body {
   /* scrollbar-width: none; Firefox */
 }
 
-.animetext {
+/* .animetext {
   text-transform: uppercase;
   background: linear-gradient(
     to right,
@@ -59,4 +59,48 @@ body {
   to {
     background-position: 200%;
   }
+} */
+.animate-text {
+  animation: fadeIn 2s ease-in-out;
+}
+.animate-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.animate-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+.parallax {
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Custom Colors */
+.text-blue_main {
+  color: #1e88e5;
+}
+.bg-blue_main {
+  background-color: #1e88e5;
+}
+/* Slider for Testimonials */
+.testimonial-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.testimonial-slider > div {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
 }

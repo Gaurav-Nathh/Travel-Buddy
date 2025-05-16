@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { fetchAuthUser } from "../queries/authQueries";
 import { axiosInstance } from "../lib/axios";
@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 
 const Post = ({ post }) => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { postId } = useParams();
   const { data: authUser, isLoading } = useQuery({
@@ -29,6 +30,7 @@ const Post = ({ post }) => {
   const [comments, setComments] = useState(post.comments || []);
   const isOwner = authUser._id === post.author._id;
   const isLiked = post.likes.includes(authUser._id);
+  const alreadyConnected = authUser?.connections?.includes(post.author._id);
 
   const { data: connectionStatus } = useQuery({
     queryKey: ["connectionStatus", post.author._id],
@@ -54,7 +56,7 @@ const Post = ({ post }) => {
       await axiosInstance.delete(`/post/delete/${post._id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.fetchQuery({ queryKey: ["posts"] });
       toast.success("Post deleted successfully");
     },
     onError: (error) => {
@@ -105,6 +107,14 @@ const Post = ({ post }) => {
     likePost();
   };
 
+  const goToProfile = () => {
+    if (post.author.username === "Buddy") {
+      toast.error("You are not authorized to access this profile");
+    } else {
+      navigate(`/profile/${post.author.username}`);
+    }
+  };
+
   const handleAddComment = async (e) => {
     e.preventDefault();
     if (newComment.trim()) {
@@ -131,19 +141,19 @@ const Post = ({ post }) => {
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
-            <Link to={`/profile/${post?.author?.username}`}>
-              <img
-                src={post.author.profilePicture}
-                alt={post.author.name}
-                className="w-12 h-12 rounded-full mr-4 shadow-sm object-cover"
-              />
-            </Link>
+            <img
+              onClick={goToProfile}
+              src={post.author.profilePicture}
+              alt="/avatar.png"
+              className="w-12 h-12 rounded-full mr-4 shadow-sm object-cover"
+            />
             <div>
-              <Link to={`/profile/${post?.author?.username}`}>
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {post.author.username}
-                </h3>
-              </Link>
+              <h3
+                className="text-lg font-semibold text-gray-900"
+                onClick={goToProfile}
+              >
+                {post.author.username} ({post.author.name})
+              </h3>
               <p className="text-sm text-gray-500">{post.author.headline}</p>
               <p className="text-xs text-gray-400">
                 {formatDistanceToNow(new Date(post.createdAt), {
@@ -228,7 +238,7 @@ const Post = ({ post }) => {
             text={`Comment (${comments.length})`}
             onClick={() => setShowComments(!showComments)}
           />
-          {!isOwner && (
+          {!isOwner && !alreadyConnected && (
             <PostAction
               icon={<Handshake size={20} />}
               text="Connect"

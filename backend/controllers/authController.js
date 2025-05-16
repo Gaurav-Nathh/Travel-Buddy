@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+import axios from "axios";
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
@@ -10,7 +12,23 @@ import {
 } from "../nodeMailer/emails.js";
 
 export const signup = async (req, res) => {
-  const { name, username, email, password } = req.body;
+  const { name, username, email, password, captchaToken } = req.body;
+  if (!captchaToken) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Captcha required" });
+  }
+
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captchaToken}`;
+
+  const captchaResponse = await axios.post(verifyUrl);
+
+  if (!captchaResponse.data.success) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Captcha verification failed" });
+  }
 
   try {
     if (!email || !password || !name || !username) {
@@ -99,7 +117,25 @@ export const verifyEmail = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, captchaToken } = req.body;
+
+  if (!captchaToken) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Captcha required" });
+  }
+
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captchaToken}`;
+
+  const captchaResponse = await axios.post(verifyUrl);
+
+  if (!captchaResponse.data.success) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Captcha verification failed" });
+  }
+
   try {
     const user = await User.findOne({ username });
     if (!user) {

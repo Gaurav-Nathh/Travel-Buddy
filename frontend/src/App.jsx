@@ -11,6 +11,7 @@ import MyTrip from "./pages/MyTrip";
 import { fetchAuthUser } from "./queries/authQueries";
 import Connection from "./pages/Connection";
 import ProfilePage from "./pages/ProfilePage";
+import NotificationPage from "./pages/NotificationPage";
 
 function App() {
   // const { data: authUser, isLoading } = useQuery({
@@ -59,6 +60,10 @@ function App() {
         <Route
           path="/profile/:username"
           element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/notifications"
+          element={authUser ? <NotificationPage /> : <Navigate to={"/login"} />}
         />
       </Routes>
       <Toaster />

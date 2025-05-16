@@ -4,6 +4,7 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { LogOut } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Menu, X, Bell } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -39,14 +40,14 @@ const Navbar = () => {
     mutationFn: () => axiosInstance.post("/auth/logout"),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      toast.success("Succesfully logout");
+      navigate("/login");
     },
   });
   const unreadNotificationCount = notifications?.data.filter(
     (notif) => !notif.read
   ).length;
   const unreadConnectionRequestCount = connectionRequests?.data?.length;
-
-  console.log(unreadNotificationCount);
 
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -87,102 +88,99 @@ const Navbar = () => {
           <img src="/TravelBuddy_Logo.svg" alt="" className="w-[13rem]" />
         </Link>
         {/* Desktop Links */}
-        <ul className="hidden md:flex space-x-8 text-xl text-gray-700 items-center">
-          {navLinks.map((link) => (
-            <li key={link.name}>
-              <Link
-                to={link.path}
-                className="relative hover:text-blue-500 transition-colors duration-200"
-              >
-                {link.name}
+        <div className="flex">
+          <ul className="hidden md:flex space-x-8 text-xl text-gray-700 items-center">
+            {navLinks.map((link) => (
+              <li key={link.name}>
+                <Link
+                  to={link.path}
+                  className="relative hover:text-blue-500 transition-colors duration-200"
+                >
+                  {link.name}
 
-                {link.count > 0 && (
-                  <span className="absolute -top-1.5 -right-3 bg-red-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-full">
-                    {link.count}
+                  {link.count > 0 && (
+                    <span className="absolute -top-1.5 -right-3 bg-red-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-full">
+                      {link.count}
+                    </span>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ul className="flex items-center ml-6 gap-6">
+            {/* Notification Icon */}
+            <li className="flex relative">
+              <Link to="/notifications" className="relative inline-block">
+                <Bell className="w-6 h-6 text-gray-700 hover:text-blue-500" />
+                {unreadNotificationCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-full">
+                    {unreadNotificationCount}
                   </span>
                 )}
               </Link>
             </li>
-          ))}
+            {authUser ? (
+              <li ref={dropdownRef} className="relative text-xl">
+                <button onClick={handleDropdownToggle}>
+                  {authUser.username}
+                </button>
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 w-36 bg-white rounded-lg shadow-lg border z-10">
+                    <Link to={`/profile/${authUser.username}`}>
+                      <button
+                        onClick={() => {
+                          setShowDropdown(false);
+                        }}
+                        className="w-full text-red-600 hover:bg-red-100 py-2 px-4 text-left rounded-b-lg"
+                      >
+                        Profile
+                      </button>
+                    </Link>
 
-          {/* Notification Icon */}
-          <li className="flex relative">
-            <Link to="/notifications" className="relative inline-block">
-              <Bell className="w-6 h-6 text-gray-700 hover:text-blue-500" />
-              {unreadNotificationCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-full">
-                  {unreadNotificationCount}
-                </span>
-              )}
-            </Link>
-          </li>
-          {authUser ? (
-            <li ref={dropdownRef} className="relative">
-              <button onClick={handleDropdownToggle}>
-                {authUser.username}
-              </button>
-              {showDropdown && (
-                <div className="absolute right-0 mt-2 w-36 bg-white rounded-lg shadow-lg border z-10">
-                  <Link to={`/profile/${authUser.username}`}>
                     <button
                       onClick={() => {
                         setShowDropdown(false);
+                        logout();
                       }}
                       className="w-full text-red-600 hover:bg-red-100 py-2 px-4 text-left rounded-b-lg"
                     >
-                      Profile
+                      Logout
                     </button>
-                  </Link>
-
-                  <button
-                    onClick={() => {
-                      setShowDropdown(false);
-                      logout();
-                    }}
-                    className="w-full text-red-600 hover:bg-red-100 py-2 px-4 text-left rounded-b-lg"
+                  </div>
+                )}
+              </li>
+            ) : (
+              <ul className="flex gap-5 font-semiBold">
+                <li>
+                  <Link
+                    to={"/signup"}
+                    className="block text-lg text-gray-700 hover:text-blue-500"
                   >
-                    Logout
-                  </button>
-                </div>
-              )}
-            </li>
-          ) : (
-            <ul className="flex gap-5 font-semiBold">
-              <li>
-                <Link
-                  to={"/signup"}
-                  className="block text-lg text-gray-700 hover:text-blue-500"
-                >
-                  Sign Up
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={"/login"}
-                  className="block text-lg text-gray-700 hover:text-blue-500"
-                >
-                  Log In
-                </Link>
-              </li>
-            </ul>
-          )}
-        </ul>
-
-        {/* Hamburger for Mobile */}
-        <div className="md:hidden flex items-center space-x-4">
-          {/* Notification (mobile) */}
-          <Link to="/notifications" className="relative inline-block">
-            <Bell className="w-6 h-6 text-gray-700" />
-            {unreadNotificationCount > 0 && (
-              <span className="absolute -top-1.5 -right-1 bg-red-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-full">
-                {unreadNotificationCount}
-              </span>
+                    Sign Up
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={"/login"}
+                    className="block text-lg text-gray-700 hover:text-blue-500"
+                  >
+                    Log In
+                  </Link>
+                </li>
+              </ul>
             )}
-          </Link>
-
-          <button onClick={toggleMenu} aria-label="Toggle Menu">
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          </ul>
+          {/* Hamburger for Mobile */}
+          <div className="md:hidden ml-6 flex items-center space-x-4">
+            {/* Notification (mobile) */}
+            <button onClick={toggleMenu} aria-label="Toggle Menu">
+              {isOpen ? (
+                <X className="w-8 h-8" />
+              ) : (
+                <Menu className="w-8 h-8" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 

@@ -4,7 +4,7 @@ export const Input = ({ icon: Icon, ...props }) => {
       <Icon size={20} className="absolute ml-3"></Icon>
       <input
         {...props}
-        className=" w-full py-3 pl-16 text-xl outline-2 outline outline-white hover:outline-[#6F85DF] rounded-lg duration-500"
+        className=" w-full py-3 pl-16 pr-14 text-xl outline-2 outline outline-white hover:outline-[#6F85DF] rounded-lg duration-500"
       />
     </div>
   );

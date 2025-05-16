@@ -21,22 +21,25 @@ const Explore = () => {
   return (
     <div className="lg:max-w-[70%] mx-auto w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
       {feedPosts?.map((post) => {
-        let displayName = "Buddy";
+        let username = "Buddy";
+        let fullname = "Buddy";
         let profilePicture = "/avatar.png";
 
         if (authUser?._id === post.author._id) {
-          displayName = post.author.name;
+          fullname = post.author.name;
+          username = post.author.username;
           profilePicture = post.author.profilePicture || "/avatar.png";
         } else if (authUser?.connections?.includes(post.author._id)) {
-          displayName = post.author.username;
+          fullname = post.author.name;
+          username = post.author.username;
           profilePicture = post.author.profilePicture || "/avatar.png";
         }
         const displayPost = {
           ...post,
           author: {
             ...post.author,
-            username: displayName,
-            name: displayName,
+            username: username,
+            name: fullname,
             profilePicture: profilePicture,
           },
         };
