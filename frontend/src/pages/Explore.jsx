@@ -25,24 +25,29 @@ const Explore = () => {
         let fullname = "Buddy";
         let profilePicture = "/avatar.png";
 
-        if (authUser?._id === post.author._id) {
+        if (post.author && authUser?._id === post.author._id) {
           fullname = post.author.name;
           username = post.author.username;
           profilePicture = post.author.profilePicture || "/avatar.png";
-        } else if (authUser?.connections?.includes(post.author._id)) {
+        } else if (
+          post.author &&
+          authUser?.connections?.includes(post.author._id)
+        ) {
           fullname = post.author.name;
           username = post.author.username;
           profilePicture = post.author.profilePicture || "/avatar.png";
         }
+
         const displayPost = {
           ...post,
           author: {
-            ...post.author,
-            username: username,
+            ...(post.author || {}),
+            username,
             name: fullname,
-            profilePicture: profilePicture,
+            profilePicture,
           },
         };
+
         return <Post key={post._id} post={displayPost} />;
       })}
       {feedPosts?.length === 0 && (
